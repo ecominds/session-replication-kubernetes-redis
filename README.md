@@ -126,7 +126,7 @@ spec:
         - name: spring.redis.host
           value: "192.168.65.4"
         - name: server.servlet.session.timeout
-          value: "10"          
+          value: "10m"          
 ---     
 apiVersion: v1
 kind: Service
