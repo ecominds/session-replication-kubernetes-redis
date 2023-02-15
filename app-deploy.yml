@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: boot-webapp
+  labels:
+    owner: ecominds
+    app: boot-webapp
+spec:
+  selector:
+    matchLabels:
+      app: boot-webapp
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: boot-webapp
+    spec:
+      containers:
+      - name: boot-webapp
+        image: ecominds/boot-webapp
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8081
+        env:
+        - name: server.port
+          value: "8081"
+        - name: spring.redis.host
+          value: "192.168.65.4"
+        - name: server.servlet.session.timeout
+          value: "10m"
+---     
+apiVersion: v1
+kind: Service
+metadata:
+  name: boot-webapp-lb
+spec:
+  selector:
+    app: boot-webapp
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8081
+    protocol: TCP
+  type: LoadBalancer
